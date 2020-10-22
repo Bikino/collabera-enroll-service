@@ -1,0 +1,17 @@
+version: '3.1'
+services:
+  app:
+    build: .
+    #image: todoimage
+    restart: always
+    container_name: enroll_app
+    ports:
+      - "8085:8085"
+    depends_on:
+      - db
+  db:
+    image: mongo
+    container_name: enroll_mongodb
+    restart: always
+    ports:
+    - 27017:27017
