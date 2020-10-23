@@ -23,7 +23,6 @@ public class Enroll {
     private Boolean status;
     private LocalDate dateOfBirth;
     private String phoneNumber;
-    private List<Dependent> dependants;
-
+    private List<Dependent> dependents;
 
 }

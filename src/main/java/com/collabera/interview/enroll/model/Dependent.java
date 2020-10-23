@@ -1,17 +1,17 @@
 package com.collabera.interview.enroll.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Data
 @Builder
-@NoArgsConstructor
+//@NoArgsConstructor
 @AllArgsConstructor
 @Document
 public class Dependent {
@@ -20,4 +20,10 @@ public class Dependent {
     private String id;
     private String name;
     private LocalDate dateOfBirth;
+
+
+
+    public Dependent() {
+        this.id = UUID.randomUUID().toString();
+    }
 }

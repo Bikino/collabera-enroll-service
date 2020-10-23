@@ -10,31 +10,32 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
 import java.util.List;
 
 import static java.lang.String.format;
 
 @Slf4j
 @RestController
-@RequestMapping("api")
+@RequestMapping("api/enroll")
 @RequiredArgsConstructor
 public class EnrollController {
 
     private final EnrollService enrollService;
 
-    @PostMapping("/enroll")
+    @PostMapping("")
     public ResponseEntity<String> addEnroll(@RequestBody Enroll enroll){
         enrollService.saveEnroll(enroll);
         return new ResponseEntity<>(format("%s", enroll), HttpStatus.OK);
     }
 
 
-    @GetMapping("/enroll")
+    @GetMapping("")
     public ResponseEntity<List<Enroll>> getAllEnrollees(){
         return new ResponseEntity<>(enrollService.findAll(), HttpStatus.OK);
     }
 
-    @GetMapping("/enroll/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Enroll> getOneEnrollee(@PathVariable(name = "id") String id){
         Enroll enroll;
         try {
@@ -46,34 +47,34 @@ public class EnrollController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PutMapping("/enroll/update/{id}")
-    public ResponseEntity<String> updateEnroll(@PathVariable("id") String id, @RequestBody Enroll enroll){
+    @PutMapping("")
+    public ResponseEntity<String> updateEnroll(@PathParam("id") String id, @RequestBody Enroll enroll){
         enroll.setId(id);
         enrollService.saveEnroll(enroll);
         return new ResponseEntity<>(format("%s", enroll), HttpStatus.OK);
     }
 
-    @DeleteMapping("/enroll/delete/{id}")
-    public ResponseEntity<String> removeEnroll(@PathVariable String id){
+    @DeleteMapping("")
+    public ResponseEntity<String> removeEnroll(@PathParam(value = "id") String id){
         enrollService.deleteEnroll(id);
         return new ResponseEntity<>(format("%s", id), HttpStatus.OK);
     }
 
-    @PutMapping("/enroll/update/dependent/{id}")
-    public ResponseEntity<String> addDependentToEnroll(@PathVariable String id, @RequestBody List<Dependent> dependentList){
-        enrollService.saveDependents(id,dependentList);
-        return new ResponseEntity<>(format("%s", dependentList), HttpStatus.OK);
+    @PutMapping("/dependent")
+    public ResponseEntity addDependentToEnroll(@PathParam(value = "enrollId") String enrollId, @RequestBody List<Dependent> dependentList){
+
+        return enrollId ==null? new ResponseEntity("ID should not be null ", HttpStatus.NOT_FOUND): new ResponseEntity(enrollService.saveDependents(enrollId,dependentList), HttpStatus.OK);
     }
 
-    @DeleteMapping("/enroll/delete/dependent/{dependentId}/{enrollId}")
-    public ResponseEntity<String> deleteDependentPer(@PathVariable String dependentId, @PathVariable String enrollId){
+    @DeleteMapping("/dependent")
+    public ResponseEntity<String> deleteDependentPer(@PathParam("dependentId") String dependentId, @PathParam(value = "enrollId") String enrollId){
         enrollService.deleteDependentByEnrollId(dependentId,enrollId);
-        return new ResponseEntity<>(format("%s", dependentId), HttpStatus.OK);
+        return new ResponseEntity<>(format("Dependent with ID %s deleted ", dependentId), HttpStatus.OK);
     }
 
-    @PutMapping("/enroll/update/dependent/{enrollId}")
-    public ResponseEntity<String> modifyDependentInEnroll(Dependent dependent, String enrollId){
-        enrollService.modifyDependent(dependent,enrollId);
-        return new ResponseEntity<>(format("%s", dependent), HttpStatus.OK);
+    @PutMapping("/dependent/modify")
+    public ResponseEntity modifyDependentInEnroll(@RequestBody Dependent dependent, @PathParam (value = "enrollId") String enrollId){
+
+        return new ResponseEntity<>( enrollService.modifyDependent(dependent,enrollId), HttpStatus.OK);
     }
 }
