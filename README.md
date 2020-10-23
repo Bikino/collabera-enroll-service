@@ -16,4 +16,4 @@
     - Gradle is managing dependencies
     
 - API Documentation : - All APIs will be available on the following url.
-    - URL: http://localhost:8085/swagger-ui.html#/ 
+    - All Created endpoints are accessible with sample inputs on the following URL: http://localhost:8085/swagger-ui.html#/ 
