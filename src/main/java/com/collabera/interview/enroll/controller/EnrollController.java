@@ -46,7 +46,7 @@ public class EnrollController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PutMapping("/enroll/{id}")
+    @PutMapping("/enroll/update/{id}")
     public ResponseEntity<String> updateEnroll(@PathVariable("id") String id, @RequestBody Enroll enroll){
         enroll.setId(id);
         enrollService.saveEnroll(enroll);
@@ -65,13 +65,13 @@ public class EnrollController {
         return new ResponseEntity<>(format("%s", dependentList), HttpStatus.OK);
     }
 
-    @DeleteMapping("/enroll/delete/dependent/{id}")
+    @DeleteMapping("/enroll/delete/dependent/{dependentId}/{enrollId}")
     public ResponseEntity<String> deleteDependentPer(@PathVariable String dependentId, @PathVariable String enrollId){
         enrollService.deleteDependentByEnrollId(dependentId,enrollId);
         return new ResponseEntity<>(format("%s", dependentId), HttpStatus.OK);
     }
 
-    @PutMapping()
+    @PutMapping("/enroll/update/dependent/{enrollId}")
     public ResponseEntity<String> modifyDependentInEnroll(Dependent dependent, String enrollId){
         enrollService.modifyDependent(dependent,enrollId);
         return new ResponseEntity<>(format("%s", dependent), HttpStatus.OK);
